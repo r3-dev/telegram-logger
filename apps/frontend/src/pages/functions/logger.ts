@@ -11,10 +11,6 @@ export const POST = async (ctx: APIContext) => {
     return json('No "name" provided', 400)
   }
 
-  if (!body.code) {
-    return json('No "code" provided', 400)
-  }
-
   if (!body.message) {
     return json('No "message" provided', 400)
   }
@@ -22,16 +18,24 @@ export const POST = async (ctx: APIContext) => {
   try {
     const generalTopic = await pb
       .collection<TopicsRecord>('topics')
-      .getFirstListItem(pb.filter('isGeneral = {:isGeneral}', { general: true }))
+      .getFirstListItem(
+        pb.filter('isGeneral = {:isGeneral}', { isGeneral: true })
+      )
 
     const logsTopic = await pb
       .collection<TopicsRecord>('topics')
       .getFirstListItem(pb.filter('name = {:name}', { name: body.name }))
 
-    await bot.api.sendMessage(generalTopic.chatOrTopicId!, `Code: ${body.code}\nMessage: <code>${body.message}</code>`, {
-      message_thread_id: logsTopic.chatOrTopicId,
-      parse_mode: 'HTML'
-    })
+    await bot.api.sendMessage(
+      generalTopic.chatOrTopicId!,
+      `${body.code ? `Code: ${body.code}\n` : ''}Message: ${body.message}${
+        body.stack ? `\n<pre language="bash">${body.stack}</pre>` : ''
+      }`,
+      {
+        message_thread_id: logsTopic.chatOrTopicId,
+        parse_mode: 'HTML'
+      }
+    )
     return json('OK', 200)
   } catch (err) {
     return json((err as Error).message, 500)

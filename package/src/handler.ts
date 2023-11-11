@@ -1,21 +1,24 @@
 import { BaseError } from './errors.js'
+import { symbolToString } from './utils.js'
 
 const LOGGER_URL = 'http://localhost:4321/functions/logger'
 
 export class ErrorHandler {
-  constructor(private readonly name: symbol) {
-    process.on('uncaughtException', async (error: BaseError) => {
+  private readonly name: string
+  constructor(name: string | symbol, private readonly isDev: boolean) {
+    this.name = symbolToString(name)
+    process.on('', async (error: BaseError) => {
       if (!this.isValidError(error)) return
-      await this.reportError(error)
+      await this.captureError(error)
       if (!this.isTrustedError(error)) {
         process.exit(1)
       }
     })
   }
 
-  private async reportError(error: BaseError): Promise<void> {
-    if (this.isValidError(error)) {
-      console.log('Error is not valid:', error)
+  async captureError(error: unknown): Promise<void> {
+    if (!(error instanceof Error)) {
+      console.log('Error is not captured:', error)
       return
     }
 
@@ -25,21 +28,22 @@ export class ErrorHandler {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: error.name,
+        name: this.name,
+        // @ts-ignore
         code: error.code,
-        message: error.message
+        message: error.message,
+        stack: error.stack
       })
     })
   }
 
-  private isTrustedError(error: BaseError) {
+  private isTrustedError(error: Error) {
     if (error instanceof BaseError) return error.isOperational
     return false
   }
 
-  private isValidError(error: BaseError) {
-    const isDev = process.env['NODE_ENV'] === 'development'
-    if (error.name !== this.name || isDev) return false
+  private isValidError(error: Error) {
+    if (error.name !== this.name || this.isDev) return false
     return true
   }
 }

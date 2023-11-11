@@ -1,33 +1,38 @@
+import { symbolToString } from './utils.js'
+
 export class BaseError extends Error {
-  // @ts-ignore
-  override readonly name: symbol
-  readonly code: number
+  override readonly name: string
+  override readonly stack?: string
   readonly isOperational: boolean
 
   constructor(
-    name: symbol,
-    code: number,
+    name: symbol | string,
     message: string,
-    isOperational: boolean
+    stack?: string,
+    isOperational = true
   ) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
 
-    this.name = name
-    this.code = code
+    this.name = symbolToString(name)
+    this.stack = stack
     this.isOperational = isOperational
 
     Error.captureStackTrace(this)
   }
 }
 
-export class APIError extends BaseError {
+export class ApiError extends BaseError {
+  code: number
+
   constructor(
-    name: symbol,
+    name: string | symbol,
     code = 200,
-    isOperational = true,
-    description = 'OK'
+    message = 'OK',
+    stack?: string,
+    isOperational?: boolean
   ) {
-    super(name, code, description, isOperational)
+    super(name, message, stack, isOperational)
+    this.code = code
   }
 }

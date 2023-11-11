@@ -90,7 +90,7 @@ generalTopic.command('create_topic', async (ctx) => {
     await ctx.reply('Topic created successfully')
     const messageTopicInfo = await bot.api.sendMessage(
       ctx.chat.id,
-      `Original name: ${res.name}\nTopic id: ${res.chatOrTopicId}\nApi key: <code>${res.apiKey}</code>`,
+      `Original name: ${res.name}\nTopic id: ${res.chatOrTopicId}`,
       {
         parse_mode: 'HTML',
         message_thread_id: topic.message_thread_id
