@@ -7,7 +7,7 @@ export class ErrorHandler {
   private readonly name: string
   constructor(name: string | symbol, private readonly isDev: boolean) {
     this.name = symbolToString(name)
-    process.on('', async (error: BaseError) => {
+    process.on('uncaughtException', async (error: BaseError) => {
       if (!this.isValidError(error)) return
       await this.captureError(error)
       if (!this.isTrustedError(error)) {
