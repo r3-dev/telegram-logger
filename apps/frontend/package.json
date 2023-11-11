@@ -7,11 +7,17 @@
     "start": "node ./dist/server/entry.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "ngrok": "node scripts/ngrok.js"
   },
   "dependencies": {
     "@astrojs/node": "6.0.3",
     "astro": "3.4.0",
+    "grammy": "1.19.2",
     "pocketbase": "0.19.0"
+  },
+  "devDependencies": {
+    "dotenv": "16.3.1",
+    "ngrok": "5.0.0-beta.2"
   }
 }

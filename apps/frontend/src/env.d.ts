@@ -8,6 +8,8 @@ declare namespace App {
 
 interface ImportMetaEnv {
   readonly INTERNAL_BACKEND_URL: string
+  readonly TELEGRAM_BOT_TOKEN: string
+  readonly TELEGRAM_WEBHOOK_SECRET: string
   // more env variables...
 }
 

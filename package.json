@@ -11,6 +11,7 @@
     "dev:backend": "dotenv -e .env.development -- pnpm --filter=./apps/backend --reporter=append-only run dev",
     "dev:proxy": "dotenv -e .env.development -- pnpm --filter=./apps/reverse-proxy --reporter=append-only run dev",
     "build": "dotenv -e .env -- pnpm --filter=./apps/* --reporter=append-only run build",
+    "build:package": "pnpm --filter=./package run build",
     "ci": "pnpm install --frozen-lockfile",
     "ci:prod": "pnpm install --frozen-lockfile --prod",
     "ngrok": "ngrok http 3000",

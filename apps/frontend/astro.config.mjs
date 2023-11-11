@@ -8,6 +8,11 @@ export default defineConfig({
     mode: 'standalone'
   }),
   vite: {
+    resolve: {
+      alias: {
+        '@': '/src'
+      }
+    },
     server: {
       proxy: {
         '/api': {
