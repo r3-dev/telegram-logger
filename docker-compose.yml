@@ -1,0 +1,61 @@
+version: "3.7"
+
+services:
+  reverse-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # reference docker target
+      target: reverse-proxy
+    container_name: reverse-proxy
+    restart: unless-stopped
+    ports:
+      - "${PROXY_PORT}:${PROXY_PORT}"
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:${PROXY_PORT}/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # reference docker target
+      target: backend 
+    container_name: backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    volumes:
+      - pocketbase-data:/dist/pb_data
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:${BACKEND_PORT}/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      # reference docker target
+      target: frontend
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:${FRONTEND_PORT}/functions/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+
+volumes:
+  pocketbase-data:

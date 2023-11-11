@@ -1,0 +1,10 @@
+{
+  "name": "reverse-proxy",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "go run . -port $PROXY_PORT",
+    "prepare": "node scripts/install.js"
+  }
+}
