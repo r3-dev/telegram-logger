@@ -11,12 +11,16 @@ await bot.api.setMyCommands([
     description: 'Init bot'
   },
   {
-    command: 'create_topic',
+    command: 'create',
     description: 'Create a topic'
   },
   {
-    command: 'delete_topic',
+    command: 'delete',
     description: 'Delete a topic'
+  },
+  {
+    command: 'topics',
+    description: 'List all topics'
   }
 ])
 
@@ -62,7 +66,7 @@ const generalTopic = supergroup.filter((ctx) => {
   return !ctx.message?.message_thread_id
 })
 
-generalTopic.command('create_topic', async (ctx) => {
+generalTopic.command('create', async (ctx) => {
   if (!ctx.match) {
     await ctx.reply('Please specify topic name')
     return
@@ -104,7 +108,7 @@ generalTopic.command('create_topic', async (ctx) => {
   }
 })
 
-generalTopic.command('delete_topic', async (ctx) => {
+generalTopic.command('delete', async (ctx) => {
   if (!ctx.match) {
     await ctx.reply('Please specify topic name')
     return
