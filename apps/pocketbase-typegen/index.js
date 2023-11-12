@@ -10,7 +10,7 @@ fs.watch(path.join(__dirname, '..', 'backend', 'migrations'), () => {
   if (isLocked) return
   isLocked = true
 
-  exec('pnpm pocketbase-typegen', (error) => {
+  exec('pnpm typegen', (error) => {
     if (isLocked) {
       isLocked = false
     }

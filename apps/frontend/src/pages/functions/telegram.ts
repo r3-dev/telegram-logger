@@ -1,6 +1,7 @@
 import { webhookCallback } from 'grammy'
-import { bot } from '@/bot'
 import type { APIContext } from 'astro'
+
+import { bot } from '@/bot'
 
 export const POST = async (ctx: APIContext) => {
   return await webhookCallback(

@@ -5,7 +5,10 @@ const LOGGER_URL = 'http://localhost:4321/functions/logger'
 
 export class ErrorHandler {
   private readonly name: string
-  constructor(name: string | symbol, private readonly isDev: boolean) {
+  constructor(
+    name: string | symbol,
+    private readonly isDev: boolean
+  ) {
     this.name = symbolToString(name)
     process.on('uncaughtException', async (error: BaseError) => {
       if (!this.isValidError(error)) return

@@ -5,6 +5,7 @@
   "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "scripts": {
+    "dev": "pnpm build --watch",
     "build": "tsup src/index.ts --format esm --dts"
   },
   "devDependencies": {

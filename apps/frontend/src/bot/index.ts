@@ -37,7 +37,9 @@ supergroup.command('start', async (ctx) => {
     await pb
       .collection<TopicsRecord>('topics')
       .getFirstListItem(
-        pb.filter('chatOrTopicId = {:chatOrTopicId}', { chatOrTopicId: ctx.chat.id })
+        pb.filter('chatOrTopicId = {:chatOrTopicId}', {
+          chatOrTopicId: ctx.chat.id
+        })
       )
     await ctx.reply('Bot is already inited')
     return
@@ -96,10 +98,7 @@ generalTopic.command('create_topic', async (ctx) => {
         message_thread_id: topic.message_thread_id
       }
     )
-    await bot.api.pinChatMessage(
-      ctx.chat.id,
-      messageTopicInfo.message_id
-    )
+    await bot.api.pinChatMessage(ctx.chat.id, messageTopicInfo.message_id)
   } catch (err) {
     await ctx.reply((err as Error).message)
   }

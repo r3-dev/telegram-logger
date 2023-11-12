@@ -12,7 +12,9 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   ctx.locals.pb = new PocketBase(import.meta.env.INTERNAL_BACKEND_URL)
 
   // load the store data from the request cookie string
-  ctx.locals.pb.authStore.loadFromCookie(ctx.request.headers.get('cookie') || '')
+  ctx.locals.pb.authStore.loadFromCookie(
+    ctx.request.headers.get('cookie') || ''
+  )
 
   try {
     // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
@@ -27,7 +29,10 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   const response = await next()
 
   // send back the default 'pb_auth' cookie to the client with the latest store state
-  response.headers.append('set-cookie', ctx.locals.pb.authStore.exportToCookie())
+  response.headers.append(
+    'set-cookie',
+    ctx.locals.pb.authStore.exportToCookie()
+  )
 
   return response
 })
